@@ -1,4 +1,4 @@
-﻿namespace CasinoWallet.Enum
+﻿namespace CasinoWallet.Models.Enum
 {
     public enum CommandType
     {

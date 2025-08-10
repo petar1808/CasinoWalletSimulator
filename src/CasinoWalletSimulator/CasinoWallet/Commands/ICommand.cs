@@ -1,10 +1,10 @@
-﻿using CasinoWallet.Enum;
+﻿using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Commands
 {
     public interface ICommand
     {
-        Task Execute();
+        void Execute();
 
         CommandType CommandType { get; }
     }

@@ -1,4 +1,4 @@
-﻿using CasinoWallet.Enum;
+﻿using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Commands
 {
@@ -6,7 +6,7 @@ namespace CasinoWallet.Commands
     {
         public CommandType CommandType => CommandType.Bet;
 
-        public Task Execute()
+        public void Execute()
         {
             throw new NotImplementedException();
         }

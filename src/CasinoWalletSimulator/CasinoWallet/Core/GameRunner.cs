@@ -1,4 +1,4 @@
-﻿using CasinoWallet.Enum;
+﻿using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Core
 {
@@ -13,12 +13,6 @@ namespace CasinoWallet.Core
 
         public void Run()
         {
-            Console.WriteLine("Available commands:");
-            foreach (var name in _commandRegistry.GetCommandNames())
-            {
-                Console.WriteLine($" - {name}");
-            }
-
             while (true)
             {
                 Console.Write("\nPlease submit Action: ");
@@ -31,7 +25,6 @@ namespace CasinoWallet.Core
                         command.Execute();
                         if (commandType == CommandType.Exit)
                         {
-                            Console.WriteLine("Thank you for playing! Hope to see you again soon.");
                             break;
                         }
                     }

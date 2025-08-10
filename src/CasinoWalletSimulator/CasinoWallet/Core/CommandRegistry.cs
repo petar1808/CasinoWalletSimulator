@@ -1,5 +1,5 @@
 ﻿using CasinoWallet.Commands;
-using CasinoWallet.Enum;
+using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Core
 {
@@ -13,7 +13,5 @@ namespace CasinoWallet.Core
         }
 
         public bool TryGetCommand(CommandType name, out ICommand command) => _commands.TryGetValue(name, out command);
-
-        public IEnumerable<CommandType> GetCommandNames() => _commands.Keys;
     }
 }

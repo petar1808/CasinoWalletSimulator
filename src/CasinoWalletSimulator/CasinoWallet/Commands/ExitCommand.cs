@@ -1,4 +1,4 @@
-﻿using CasinoWallet.Enum;
+﻿using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Commands
 {
@@ -6,9 +6,9 @@ namespace CasinoWallet.Commands
     {
         public CommandType CommandType => CommandType.Exit;
 
-        public Task Execute()
+        public void Execute()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Thank you for playing! Hope to see you again soon.");
         }
     }
 }
