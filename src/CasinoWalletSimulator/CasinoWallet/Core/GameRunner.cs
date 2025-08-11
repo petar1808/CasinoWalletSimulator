@@ -18,7 +18,11 @@ namespace CasinoWallet.Core
                 Console.WriteLine("\nPlease submit Action: ");
                 var input = Console.ReadLine();
 
-                if (System.Enum.TryParse<CommandType>(input, true, out var commandType))
+                if (int.TryParse(input, out _))
+                {
+                    Console.WriteLine("Numeric input is not allowed.");
+                }
+                else if (System.Enum.TryParse<CommandType>(input, true, out var commandType))
                 {
                     if (_commandRegistry.TryGetCommand(commandType, out var command))
                     {

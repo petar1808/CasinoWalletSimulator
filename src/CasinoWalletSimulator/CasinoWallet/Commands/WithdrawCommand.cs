@@ -22,7 +22,7 @@ namespace CasinoWallet.Commands
             {
                 if (_walletService.Withdraw(parsedWithdrawAmount))
                 {
-                    Console.WriteLine($"Your withdrawal of ${parsedWithdrawAmount}. Your current balance is: ${_walletService.Balance}.");
+                    Console.WriteLine($"Your withdrawal of ${parsedWithdrawAmount}. Your current balance is: ${_walletService.Balance:F2}.");
                 }
                 else
                 {

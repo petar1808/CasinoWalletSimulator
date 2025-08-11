@@ -26,7 +26,7 @@ namespace CasinoWallet.Commands
 
             if (decimal.TryParse(betAmount, out var parsedBetAmount))
             {
-                if (parsedBetAmount < _betSettings.MinBet || parsedBetAmount >= _betSettings.MaxBet)
+                if (parsedBetAmount < _betSettings.MinBet || parsedBetAmount > _betSettings.MaxBet)
                 {
                     Console.WriteLine($"Bet must be between {_betSettings.MinBet} and {_betSettings.MaxBet}.");
                     return;
@@ -46,11 +46,11 @@ namespace CasinoWallet.Commands
                 
                 if (winAmount > 0)
                 {
-                    Console.WriteLine($"Congrats - you won ${winAmount}! Your current balanse is: ${_walletService.Balance}");
+                    Console.WriteLine($"Congrats - you won ${winAmount:F2}! Your current balanse is: ${_walletService.Balance:F2}");
                 }
                 else
                 {
-                    Console.WriteLine($"No luch this tume! Your current balanse is: ${_walletService.Balance}");
+                    Console.WriteLine($"No luck this tume! Your current balanse is: ${_walletService.Balance:F2}");
                 }
             }
             else

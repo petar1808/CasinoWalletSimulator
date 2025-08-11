@@ -22,7 +22,7 @@ namespace CasinoWallet.Commands
             {
                 _walletService.Deposit(parsedDepositAmount);
 
-                Console.WriteLine($"Your deposit of ${parsedDepositAmount} was successful. Your current balance is: ${_walletService.Balance}");
+                Console.WriteLine($"Your deposit of ${parsedDepositAmount} was successful. Your current balance is: ${_walletService.Balance:F2}");
             }
             else
             {
