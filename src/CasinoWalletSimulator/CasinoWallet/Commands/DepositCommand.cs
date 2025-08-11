@@ -16,11 +16,13 @@ namespace CasinoWallet.Commands
 
         public void Execute()
         {
-            var amount = Console.ReadLine();
+            var depositAmount = Console.ReadLine();
 
-            if (decimal.TryParse(amount, out var parsedAmount))
+            if (decimal.TryParse(depositAmount, out var parsedDepositAmount))
             {
-                _walletService.Deposit(parsedAmount);
+                _walletService.Deposit(parsedDepositAmount);
+
+                Console.WriteLine($"Your deposit of ${parsedDepositAmount} was successful. Your current balance is: ${_walletService.Balance}");
             }
             else
             {

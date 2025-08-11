@@ -16,15 +16,13 @@ namespace CasinoWallet.Commands
 
         public void Execute()
         {
-            Console.Write($"Withdraw: ");
+            var withdrawAmount = Console.ReadLine();
 
-            var amount = Console.ReadLine();
-
-            if (decimal.TryParse(amount, out var parsedAmount))
+            if (decimal.TryParse(withdrawAmount, out var parsedWithdrawAmount))
             {
-                if (_walletService.Withdraw(parsedAmount))
+                if (_walletService.Withdraw(parsedWithdrawAmount))
                 {
-                    Console.WriteLine($"Your withdrawal of ${_walletService.Balance}. Your current balance is: ${_walletService.Balance - parsedAmount}.");
+                    Console.WriteLine($"Your withdrawal of ${parsedWithdrawAmount}. Your current balance is: ${_walletService.Balance}.");
                 }
                 else
                 {

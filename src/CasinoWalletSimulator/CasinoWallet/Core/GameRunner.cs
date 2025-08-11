@@ -15,7 +15,7 @@ namespace CasinoWallet.Core
         {
             while (true)
             {
-                Console.Write("\nPlease submit Action: ");
+                Console.WriteLine("\nPlease submit Action: ");
                 var input = Console.ReadLine();
 
                 if (System.Enum.TryParse<CommandType>(input, true, out var commandType))
