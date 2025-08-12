@@ -3,12 +3,12 @@ using Microsoft.Extensions.Options;
 
 namespace CasinoWallet.Services
 {
-    public class GameOfChanceService
+    public class GameService : IGameService
     {
         private Random _random;
         private readonly GameOfChanceSettings _gameOfChanceSettings;
 
-        public GameOfChanceService(Random random, IOptions<GameOfChanceSettings> gameOfChanceSettings)
+        public GameService(Random random, IOptions<GameOfChanceSettings> gameOfChanceSettings)
         {
             _random = random;
             _gameOfChanceSettings = gameOfChanceSettings.Value;

@@ -22,16 +22,15 @@ class Program
 
                 services.AddSingleton<GameRunner>();
                 services.AddSingleton<CommandRegistry>();
-                services.AddSingleton<GameOfChanceService>();
+                services.AddSingleton<IGameService, GameService>();
                 services.AddSingleton<Random>();
 
-                services.AddSingleton<PlayerWallet>();
-                services.AddSingleton<WalletService>();
+                services.AddSingleton<IWalletService, WalletService>();
 
-                services.AddTransient<ICommand, DepositCommand>();
-                services.AddTransient<ICommand, WithdrawCommand>();
-                services.AddTransient<ICommand, ExitCommand>();
-                services.AddTransient<ICommand, BetCommand>();
+                services.AddSingleton<ICommand, DepositCommand>();
+                services.AddSingleton<ICommand, WithdrawCommand>();
+                services.AddSingleton<ICommand, ExitCommand>();
+                services.AddSingleton<ICommand, BetCommand>();
             })
             .Build();
 

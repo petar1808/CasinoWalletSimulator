@@ -8,10 +8,10 @@ namespace CasinoWallet.Commands
     public class BetCommand : ICommand
     {
         private readonly WalletService _walletService;
-        private readonly GameOfChanceService _gameOfChanceService;
+        private readonly GameService _gameOfChanceService;
         private readonly BetSettings _betSettings;
 
-        public BetCommand(WalletService walletService, GameOfChanceService gameOfChanceService, IOptions<BetSettings> betSettings)
+        public BetCommand(WalletService walletService, GameService gameOfChanceService, IOptions<BetSettings> betSettings)
         {
             _walletService = walletService;
             _gameOfChanceService = gameOfChanceService;

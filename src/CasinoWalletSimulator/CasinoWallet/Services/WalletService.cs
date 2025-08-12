@@ -2,27 +2,27 @@
 
 namespace CasinoWallet.Services
 {
-    public class WalletService : PlayerWallet
+    public class WalletService : IWalletService
     {
-        private readonly PlayerWallet _playerWallet;
+        private decimal _balance;
 
-        public WalletService(PlayerWallet playerWallet)
+        public WalletService(decimal initialBalance = 0)
         {
-            _playerWallet = playerWallet;
+            _balance = initialBalance;
         }
 
-        public decimal Balance => _playerWallet.Balance;
+        public decimal Balance => _balance;
 
-        public void Deposit(decimal deposit)
+        public void Deposit(decimal amount)
         {
-            _playerWallet.Balance += deposit;
+            _balance += amount;
         }
 
-        public bool Withdraw(decimal withdrawAmount)
+        public bool Withdraw(decimal amount)
         {
-            if (Balance >= withdrawAmount)
+            if (_balance >= amount)
             {
-                _playerWallet.Balance -= withdrawAmount;
+                _balance -= amount;
                 return true;
             }
 
