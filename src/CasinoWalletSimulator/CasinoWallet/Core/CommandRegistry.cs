@@ -3,7 +3,7 @@ using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Core
 {
-    public class CommandRegistry
+    public class CommandRegistry : ICommandRegistry
     {
         private readonly Dictionary<CommandType, ICommand> _commands;
 

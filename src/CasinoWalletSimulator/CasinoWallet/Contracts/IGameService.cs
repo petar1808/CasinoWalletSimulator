@@ -1,6 +1,6 @@
 ﻿using CasinoWallet.Models;
 
-namespace CasinoWallet.Services
+namespace CasinoWallet.Contracts
 {
     public interface IGameService
     {

@@ -1,18 +1,18 @@
 ﻿using CasinoWallet.Config;
+using CasinoWallet.Contracts;
 using CasinoWallet.Models;
 using CasinoWallet.Models.Enum;
-using CasinoWallet.Services;
 using Microsoft.Extensions.Options;
 
 namespace CasinoWallet.Commands
 {
     public class BetCommand : ICommand
     {
-        private readonly WalletService _walletService;
+        private readonly IWalletService _walletService;
         private readonly IGameService _gameService;
         private readonly BetSettings _betSettings;
 
-        public BetCommand(WalletService walletService, GameService gameService, IOptions<BetSettings> betSettings)
+        public BetCommand(IWalletService walletService, IGameService gameService, IOptions<BetSettings> betSettings)
         {
             _walletService = walletService;
             _gameService = gameService;
@@ -33,22 +33,36 @@ namespace CasinoWallet.Commands
                 return new Result(false, $"Insufficient funds to place this bet.");
             }
 
-            var resultWinAmount = _gameService.PlayRound(amount);
+            var playResult = _gameService.PlayRound(amount);
 
-            if (!resultWinAmount.IsSuccess)
+            if (!playResult.IsSuccess)
             {
-                return new Result(false, resultWinAmount.Message);
+                return new Result(false, playResult.Message);
             }
 
-            var resultUpdateBalance = _walletService.UpdateBalance(amount, resultWinAmount.Data);
+            var balanceUpdateAmount = playResult.Data - amount;
 
-            if (resultWinAmount.Data > 0)
+            if (playResult.Data > 0)
             {
-                return new Result(true, $"Congrats - you won ${resultWinAmount.Data:F2}! Your current balanse is: ${_walletService.Balance:F2}");
+                var updateBalanceResult = _walletService.UpdateBalance(balanceUpdateAmount);
+
+                if (!updateBalanceResult.IsSuccess)
+                {
+                    return new Result(false, updateBalanceResult.Message);
+                }
+
+                return new Result(true, $"Congrats - you won ${playResult.Data:F2}! Your current balanse is: ${_walletService.Balance:F2}");
             }
             else
             {
-                return new Result(true, $"No luck this tume! Your current balanse is: ${_walletService.Balance:F2}");
+                var withrawResult = _walletService.Withdraw(amount);
+
+                if (!withrawResult.IsSuccess)
+                {
+                    return withrawResult;
+                }
+
+                return new Result(true, $"No luck this time! Your current balanse is: ${_walletService.Balance:F2}");
             }
         }
     }

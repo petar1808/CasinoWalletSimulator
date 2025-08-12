@@ -1,10 +1,10 @@
 ﻿namespace CasinoWallet.Config
 {
-    public class GameOfChanceSettings
+    public class GameSettings
     {
-        public int LoseChancePercent { get; set; }
+        public int LosePercent { get; set; }
 
-        public int WinUpTo2ChancePercent { get; set; }
+        public int WinUpTo2Percent { get; set; }
 
         public double MaxSmallWinMultiplier { get; set; }
 

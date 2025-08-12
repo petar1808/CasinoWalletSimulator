@@ -1,4 +1,5 @@
-﻿using CasinoWallet.Models;
+﻿using CasinoWallet.Contracts;
+using CasinoWallet.Models;
 
 namespace CasinoWallet.Services
 {
@@ -6,9 +7,9 @@ namespace CasinoWallet.Services
     {
         private decimal _balance;
 
-        public WalletService(decimal initialBalance = 0)
+        public WalletService()
         {
-            _balance = initialBalance;
+            _balance = 0;
         }
 
         public decimal Balance => _balance;
@@ -22,7 +23,7 @@ namespace CasinoWallet.Services
 
             _balance += amount;
 
-            return new Result(true, null!);
+            return new Result(true, string.Empty);
         }
 
         public Result Withdraw(decimal amount)
@@ -32,30 +33,26 @@ namespace CasinoWallet.Services
                 return new Result(false, "Withdraw amount must be a positive number!");
             }
 
-            if (_balance >= amount)
+            if (amount > _balance)
             {
-                _balance -= amount;
-                return new Result (true, null!);
+                return new Result(false, "Insufficient funds.");
             }
 
-            return new Result(false, "Insufficient funds.");
+            _balance -= amount;
+
+            return new Result(true, string.Empty);
         }
 
-        public Result UpdateBalance(decimal betAmount, decimal winAmount)
+        public Result UpdateBalance(decimal amount)
         {
-            if (betAmount <= 0)
+            if (amount <= 0)
             {
-                return new Result(false, "Bet amount must be a positive number!");
+                return new Result(false, "Update balance amount must be a positive number!");
             }
 
-            if (betAmount > _balance)
-            {
-                return new Result(false, "Bet amount cannot be greater than your current balance!");
-            }
+            _balance += amount;
 
-            _balance = _balance - betAmount + winAmount;
-
-            return new Result(true, null!);
+            return new Result(true, string.Empty);
         }
     }
 }

@@ -1,71 +1,60 @@
-﻿using CasinoWallet.Helper;
-using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Contracts;
 
 namespace CasinoWallet.Core
 {
     public class GameRunner
     {
-        private readonly CommandRegistry _commandRegistry;
+        private const string ExitCommand = "exit";
+        private const string ExitMessage = "Thank you for playing! Hope to see you again soon.";
 
-        public GameRunner(CommandRegistry commandRegistry)
+        private readonly ICommandRegistry _commandRegistry;
+        private readonly ICommandParserService _commandParserService;
+        private readonly IConsoleService _consoleService;
+
+        public GameRunner(ICommandRegistry commandRegistry, ICommandParserService commandParserService, IConsoleService consoleService)
         {
             _commandRegistry = commandRegistry;
+            _commandParserService = commandParserService;
+            _consoleService = consoleService;
         }
 
         public void Run()
         {
             while (true)
             {
-                try
+                _consoleService.WriteLine("\nPlease submit Action: ");
+                var input = _consoleService.ReadLine();
+
+                if (string.Equals(input?.Trim(), ExitCommand, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine("\nPlease submit Action: ");
-                    var input = Console.ReadLine();
+                    _consoleService.WriteLine(ExitMessage);
+                    break;
+                }
 
-                    if (string.IsNullOrWhiteSpace(input))
+                var commandParserResult = _commandParserService.ParseCommand(input);
+
+                if (commandParserResult.IsSuccess)
+                {
+                    if (_commandRegistry.TryGetCommand(commandParserResult.Data.CommandType, out var command))
                     {
-                        Console.WriteLine("Error: Action cannot be empty. Please enter a valid command.");
-                        continue;
-                    }
-
-                    var inputs = input.Split(' ');
-
-                    if (inputs.Count() > 2)
-                    {
-                        Console.WriteLine("Error: Invalid command format. Use: <command> <amount>");
-                        continue;
-                    }
-
-                    var commandInput = inputs[0];
-
-                    var amountInput = int.Parse(inputs[1]);
-
-                    if (EnumHelper.TryParseNonNumeric<CommandType>(commandInput, true, out var commandType))
-                    {
-                        if (_commandRegistry.TryGetCommand(commandType, out var command))
+                        try
                         {
-                            var result = command.Execute(amountInput);
-
-                            Console.WriteLine(result.Message);
-
-                            if (commandType == CommandType.Exit)
-                            {
-                                break;
-                            }
+                            var result = command.Execute(commandParserResult.Data.Amount);
+                            _consoleService.WriteLine(result.Message);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Command not implemented.");
+                            _consoleService.WriteLine($"An unexpected error occurred during command execution: {ex.Message}");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Unknown command.");
+                        _consoleService.WriteLine("Unsupported command.");
                     }
                 }
-                catch (Exception)
+                else
                 {
-                    Console.WriteLine($"An unexpected error occurred:");
-                    continue;
+                    _consoleService.WriteLine(commandParserResult.Message);
                 }
             }
         }

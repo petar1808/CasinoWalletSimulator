@@ -1,7 +1,7 @@
 ﻿using CasinoWallet.Commands;
 using CasinoWallet.Config;
+using CasinoWallet.Contracts;
 using CasinoWallet.Core;
-using CasinoWallet.Models;
 using CasinoWallet.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,23 +14,26 @@ class Program
         using var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.Configure<GameOfChanceSettings>(
-                  context.Configuration.GetSection(nameof(GameOfChanceSettings)));
+                services.Configure<GameSettings>(
+                  context.Configuration.GetSection(nameof(GameSettings)));
 
                 services.Configure<BetSettings>(
                   context.Configuration.GetSection(nameof(BetSettings)));
 
-                services.AddSingleton<GameRunner>();
-                services.AddSingleton<CommandRegistry>();
-                services.AddSingleton<IGameService, GameService>();
                 services.AddSingleton<Random>();
 
+                services.AddSingleton<IGameService, GameService>();
                 services.AddSingleton<IWalletService, WalletService>();
+                services.AddSingleton<ICommandParserService, CommandParserService>();
+                services.AddSingleton<IConsoleService, ConsoleService>();
 
                 services.AddSingleton<ICommand, DepositCommand>();
                 services.AddSingleton<ICommand, WithdrawCommand>();
-                services.AddSingleton<ICommand, ExitCommand>();
                 services.AddSingleton<ICommand, BetCommand>();
+
+                services.AddSingleton<ICommandRegistry, CommandRegistry>();
+
+                services.AddSingleton<GameRunner>();
             })
             .Build();
 

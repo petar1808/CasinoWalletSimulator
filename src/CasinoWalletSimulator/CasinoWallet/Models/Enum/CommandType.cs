@@ -4,7 +4,6 @@
     {
         Bet,
         Deposit,
-        Withdraw,
-        Exit
+        Withdraw
     }
 }

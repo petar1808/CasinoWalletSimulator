@@ -8,9 +8,9 @@
             Message = message;
         }
 
-        public bool IsSuccess { get; set; }
+        public bool IsSuccess { get; }
 
-        public string Message { get; set; } = default!;
+        public string Message { get; }
     }
 
     public class Result<TData> : Result

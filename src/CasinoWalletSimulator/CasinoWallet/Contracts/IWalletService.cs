@@ -1,6 +1,6 @@
 ﻿using CasinoWallet.Models;
 
-namespace CasinoWallet.Services
+namespace CasinoWallet.Contracts
 {
     public interface IWalletService
     {
@@ -10,6 +10,6 @@ namespace CasinoWallet.Services
 
         Result Withdraw(decimal withdrawAmount);
 
-        Result UpdateBalance(decimal betAmount, decimal winAmount);
+        Result UpdateBalance(decimal amount);
     }
 }

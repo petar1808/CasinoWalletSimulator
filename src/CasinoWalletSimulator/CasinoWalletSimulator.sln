@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36202.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CasinoWallet", "CasinoWallet\CasinoWallet.csproj", "{A0D037A0-8134-4BFC-8FEB-1479DFD6F230}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CasinoWallet.Tests", "..\CasinoWallet.Tests\CasinoWallet.Tests\CasinoWallet.Tests.csproj", "{A7524098-BCF4-47B0-9B5E-489364AE04B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A0D037A0-8134-4BFC-8FEB-1479DFD6F230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0D037A0-8134-4BFC-8FEB-1479DFD6F230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0D037A0-8134-4BFC-8FEB-1479DFD6F230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7524098-BCF4-47B0-9B5E-489364AE04B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7524098-BCF4-47B0-9B5E-489364AE04B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7524098-BCF4-47B0-9B5E-489364AE04B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7524098-BCF4-47B0-9B5E-489364AE04B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

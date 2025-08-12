@@ -1,14 +1,14 @@
-﻿using CasinoWallet.Models;
+﻿using CasinoWallet.Contracts;
+using CasinoWallet.Models;
 using CasinoWallet.Models.Enum;
-using CasinoWallet.Services;
 
 namespace CasinoWallet.Commands
 {
     public class WithdrawCommand : ICommand
     {
-        private readonly WalletService _walletService;
+        private readonly IWalletService _walletService;
 
-        public WithdrawCommand(WalletService walletService)
+        public WithdrawCommand(IWalletService walletService)
         {
             _walletService = walletService;
         }
@@ -21,7 +21,7 @@ namespace CasinoWallet.Commands
 
             if (result.IsSuccess)
             {
-                return new Result(true, $"Your withdrawal of ${amount}. Your current balance is: ${_walletService.Balance:F2}.");
+                return new Result(true, $"Your withdrawal of ${amount:F2} was successful. Your current balance is: ${_walletService.Balance:F2}.");
             }
 
             return result;
