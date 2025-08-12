@@ -1,10 +1,11 @@
-﻿using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Models;
+using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Commands
 {
     public interface ICommand
     {
-        void Execute();
+        Result Execute(decimal amount);
 
         CommandType CommandType { get; }
     }

@@ -1,4 +1,5 @@
-﻿using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Models;
+using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Commands
 {
@@ -6,9 +7,9 @@ namespace CasinoWallet.Commands
     {
         public CommandType CommandType => CommandType.Exit;
 
-        public void Execute()
+        public Result Execute(decimal amount)
         {
-            Console.WriteLine("Thank you for playing! Hope to see you again soon.");
+            return new Result(true, "Thank you for playing! Hope to see you again soon.");
         }
     }
 }

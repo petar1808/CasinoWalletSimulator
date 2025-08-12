@@ -1,7 +1,9 @@
-﻿namespace CasinoWallet.Services
+﻿using CasinoWallet.Models;
+
+namespace CasinoWallet.Services
 {
     public interface IGameService
     {
-        decimal PlayRound(decimal betAmount);
+        Result<decimal> PlayRound(decimal betAmount);
     }
 }

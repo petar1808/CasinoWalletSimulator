@@ -1,4 +1,5 @@
 ﻿using CasinoWallet.Config;
+using CasinoWallet.Models;
 using CasinoWallet.Models.Enum;
 using CasinoWallet.Services;
 using Microsoft.Extensions.Options;
@@ -8,54 +9,46 @@ namespace CasinoWallet.Commands
     public class BetCommand : ICommand
     {
         private readonly WalletService _walletService;
-        private readonly GameService _gameOfChanceService;
+        private readonly IGameService _gameService;
         private readonly BetSettings _betSettings;
 
-        public BetCommand(WalletService walletService, GameService gameOfChanceService, IOptions<BetSettings> betSettings)
+        public BetCommand(WalletService walletService, GameService gameService, IOptions<BetSettings> betSettings)
         {
             _walletService = walletService;
-            _gameOfChanceService = gameOfChanceService;
+            _gameService = gameService;
             _betSettings = betSettings.Value;
         }
 
         public CommandType CommandType => CommandType.Bet;
 
-        public void Execute()
+        public Result Execute(decimal amount)
         {
-            var betAmount = Console.ReadLine();
-
-            if (decimal.TryParse(betAmount, out var parsedBetAmount))
+            if (amount < _betSettings.MinBet || amount > _betSettings.MaxBet)
             {
-                if (parsedBetAmount < _betSettings.MinBet || parsedBetAmount > _betSettings.MaxBet)
-                {
-                    Console.WriteLine($"Bet must be between {_betSettings.MinBet} and {_betSettings.MaxBet}.");
-                    return;
-                }
+                return new Result(false, $"Bet must be between {_betSettings.MinBet} and {_betSettings.MaxBet}.");
+            }
 
-                if (_walletService.Balance < parsedBetAmount)
-                {
-                    Console.WriteLine("Insufficient funds to place this bet.");
-                    return;
-                }
+            if (_walletService.Balance < amount)
+            {
+                return new Result(false, $"Insufficient funds to place this bet.");
+            }
 
-                _walletService.Withdraw(parsedBetAmount);
+            var resultWinAmount = _gameService.PlayRound(amount);
 
-                var winAmount = _gameOfChanceService.PlayRound(parsedBetAmount);
+            if (!resultWinAmount.IsSuccess)
+            {
+                return new Result(false, resultWinAmount.Message);
+            }
 
-                _walletService.Deposit(winAmount);
-                
-                if (winAmount > 0)
-                {
-                    Console.WriteLine($"Congrats - you won ${winAmount:F2}! Your current balanse is: ${_walletService.Balance:F2}");
-                }
-                else
-                {
-                    Console.WriteLine($"No luck this tume! Your current balanse is: ${_walletService.Balance:F2}");
-                }
+            var resultUpdateBalance = _walletService.UpdateBalance(amount, resultWinAmount.Data);
+
+            if (resultWinAmount.Data > 0)
+            {
+                return new Result(true, $"Congrats - you won ${resultWinAmount.Data:F2}! Your current balanse is: ${_walletService.Balance:F2}");
             }
             else
             {
-                Console.WriteLine("Invalid amount.");
+                return new Result(true, $"No luck this tume! Your current balanse is: ${_walletService.Balance:F2}");
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Models;
+using CasinoWallet.Models.Enum;
 using CasinoWallet.Services;
 
 namespace CasinoWallet.Commands
@@ -14,20 +15,16 @@ namespace CasinoWallet.Commands
 
         public CommandType CommandType => CommandType.Deposit;
 
-        public void Execute()
+        public Result Execute(decimal amount)
         {
-            var depositAmount = Console.ReadLine();
+            var result = _walletService.Deposit(amount);
 
-            if (decimal.TryParse(depositAmount, out var parsedDepositAmount))
+            if (result.IsSuccess)
             {
-                _walletService.Deposit(parsedDepositAmount);
+                return new Result(true, $"Your deposit of ${amount} was successful. Your current balance is: ${_walletService.Balance:F2}");
+            }
 
-                Console.WriteLine($"Your deposit of ${parsedDepositAmount} was successful. Your current balance is: ${_walletService.Balance:F2}");
-            }
-            else
-            {
-                Console.WriteLine("Invalid amount.");
-            }
+            return result;
         }
     }
 }

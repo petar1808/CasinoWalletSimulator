@@ -13,20 +13,49 @@ namespace CasinoWallet.Services
 
         public decimal Balance => _balance;
 
-        public void Deposit(decimal amount)
+        public Result Deposit(decimal amount)
         {
+            if (amount <= 0) 
+            {
+                return new Result(false, "Deposit amount must be a positive number!");
+            }
+
             _balance += amount;
+
+            return new Result(true, null!);
         }
 
-        public bool Withdraw(decimal amount)
+        public Result Withdraw(decimal amount)
         {
+            if (amount <= 0)
+            {
+                return new Result(false, "Withdraw amount must be a positive number!");
+            }
+
             if (_balance >= amount)
             {
                 _balance -= amount;
-                return true;
+                return new Result (true, null!);
             }
 
-            return false;
+            return new Result(false, "Insufficient funds.");
+        }
+
+        public Result UpdateBalance(decimal betAmount, decimal winAmount)
+        {
+            if (betAmount <= 0)
+            {
+                return new Result(false, "Bet amount must be a positive number!");
+            }
+
+            if (betAmount > _balance)
+            {
+                return new Result(false, "Bet amount cannot be greater than your current balance!");
+            }
+
+            _balance = _balance - betAmount + winAmount;
+
+            return new Result(true, null!);
         }
     }
 }

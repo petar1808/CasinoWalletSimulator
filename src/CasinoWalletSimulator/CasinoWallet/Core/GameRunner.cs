@@ -1,4 +1,5 @@
-﻿using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Helper;
+using CasinoWallet.Models.Enum;
 
 namespace CasinoWallet.Core
 {
@@ -15,31 +16,56 @@ namespace CasinoWallet.Core
         {
             while (true)
             {
-                Console.WriteLine("\nPlease submit Action: ");
-                var input = Console.ReadLine();
+                try
+                {
+                    Console.WriteLine("\nPlease submit Action: ");
+                    var input = Console.ReadLine();
 
-                if (int.TryParse(input, out _))
-                {
-                    Console.WriteLine("Numeric input is not allowed.");
-                }
-                else if (System.Enum.TryParse<CommandType>(input, true, out var commandType))
-                {
-                    if (_commandRegistry.TryGetCommand(commandType, out var command))
+                    if (string.IsNullOrWhiteSpace(input))
                     {
-                        command.Execute();
-                        if (commandType == CommandType.Exit)
+                        Console.WriteLine("Error: Action cannot be empty. Please enter a valid command.");
+                        continue;
+                    }
+
+                    var inputs = input.Split(' ');
+
+                    if (inputs.Count() > 2)
+                    {
+                        Console.WriteLine("Error: Invalid command format. Use: <command> <amount>");
+                        continue;
+                    }
+
+                    var commandInput = inputs[0];
+
+                    var amountInput = int.Parse(inputs[1]);
+
+                    if (EnumHelper.TryParseNonNumeric<CommandType>(commandInput, true, out var commandType))
+                    {
+                        if (_commandRegistry.TryGetCommand(commandType, out var command))
                         {
-                            break;
+                            var result = command.Execute(amountInput);
+
+                            Console.WriteLine(result.Message);
+
+                            if (commandType == CommandType.Exit)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Command not implemented.");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Command not implemented.");
+                        Console.WriteLine("Unknown command.");
                     }
                 }
-                else
+                catch (Exception)
                 {
-                    Console.WriteLine("Unknown command.");
+                    Console.WriteLine($"An unexpected error occurred:");
+                    continue;
                 }
             }
         }

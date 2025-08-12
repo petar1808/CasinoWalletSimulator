@@ -1,4 +1,5 @@
 ﻿using CasinoWallet.Config;
+using CasinoWallet.Models;
 using Microsoft.Extensions.Options;
 
 namespace CasinoWallet.Services
@@ -14,28 +15,39 @@ namespace CasinoWallet.Services
             _gameOfChanceSettings = gameOfChanceSettings.Value;
         }
 
-        public decimal PlayRound(decimal betAmount)
+        public Result<decimal> PlayRound(decimal betAmount)
         {
-            var chance = _random.Next(0, 100);
+            try
+            {
+                if (betAmount <= 0)
+                {
+                    return new Result<decimal>(false, "Bet amount must be a positive number!", 0);
+                }
 
-            var winAmount = 0M;
+                var chance = _random.Next(0, 100);
 
-            if (chance < _gameOfChanceSettings.LoseChancePercent)
-            {
-                winAmount = 0;
-                return winAmount;
+                var winAmount = 0M;
+
+                if (chance < _gameOfChanceSettings.LoseChancePercent)
+                {
+                    winAmount = 0;
+                }
+                else if (chance < _gameOfChanceSettings.LoseChancePercent + _gameOfChanceSettings.WinUpTo2ChancePercent)
+                {
+                    double multiplier = 1 + _random.NextDouble() * (_gameOfChanceSettings.MaxSmallWinMultiplier - 1);
+                    winAmount = betAmount * (decimal)multiplier;
+                }
+                else
+                {
+                    double multiplier = 2 + _random.NextDouble() * (_gameOfChanceSettings.MaxBigWinMultiplier - 2);
+                    winAmount = betAmount * (decimal)multiplier;
+                }
+
+                return new Result<decimal>(true, null!, winAmount);
             }
-            else if (chance < _gameOfChanceSettings.LoseChancePercent + _gameOfChanceSettings.WinUpTo2ChancePercent)
+            catch (Exception)
             {
-                double multiplier = 1 + _random.NextDouble() * (_gameOfChanceSettings.MaxSmallWinMultiplier - 1);
-                winAmount = betAmount * (decimal)multiplier;
-                return winAmount;
-            }
-            else
-            {
-                double multiplier = 2 + _random.NextDouble() * (_gameOfChanceSettings.MaxBigWinMultiplier - 2);
-                winAmount = betAmount * (decimal)multiplier;
-                return winAmount;
+                return new Result<decimal>(false, $"An unexpected error occurred while playing the round", 0);
             }
         }
     }

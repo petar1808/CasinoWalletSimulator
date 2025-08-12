@@ -1,4 +1,5 @@
-﻿using CasinoWallet.Models.Enum;
+﻿using CasinoWallet.Models;
+using CasinoWallet.Models.Enum;
 using CasinoWallet.Services;
 
 namespace CasinoWallet.Commands
@@ -14,25 +15,16 @@ namespace CasinoWallet.Commands
 
         public CommandType CommandType => CommandType.Withdraw;
 
-        public void Execute()
+        public Result Execute(decimal amount)
         {
-            var withdrawAmount = Console.ReadLine();
+            var result = _walletService.Withdraw(amount);
 
-            if (decimal.TryParse(withdrawAmount, out var parsedWithdrawAmount))
+            if (result.IsSuccess)
             {
-                if (_walletService.Withdraw(parsedWithdrawAmount))
-                {
-                    Console.WriteLine($"Your withdrawal of ${parsedWithdrawAmount}. Your current balance is: ${_walletService.Balance:F2}.");
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient funds.");
-                }
+                return new Result(true, $"Your withdrawal of ${amount}. Your current balance is: ${_walletService.Balance:F2}.");
             }
-            else
-            {
-                Console.WriteLine("Invalid amount.");
-            }
+
+            return result;
         }
     }
 }

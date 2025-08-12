@@ -1,11 +1,15 @@
-﻿namespace CasinoWallet.Services
+﻿using CasinoWallet.Models;
+
+namespace CasinoWallet.Services
 {
     public interface IWalletService
     {
         decimal Balance { get;}
 
-        void Deposit(decimal deposit);
+        Result Deposit(decimal deposit);
 
-        bool Withdraw(decimal withdrawAmount);
+        Result Withdraw(decimal withdrawAmount);
+
+        Result UpdateBalance(decimal betAmount, decimal winAmount);
     }
 }
